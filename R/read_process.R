@@ -8,7 +8,7 @@
 #' @examples
 #' process <- read_process()
 #' str(process)
-read_process <- function(file = "processes/general.txt") {
+read_process <- function(file = "inst/processes/0general.txt") {
   lines <- readLines(file)
 
   # remove empty

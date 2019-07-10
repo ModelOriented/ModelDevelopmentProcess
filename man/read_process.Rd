@@ -4,7 +4,7 @@
 \alias{read_process}
 \title{Read process from a config file}
 \usage{
-read_process(file = "processes/general.txt")
+read_process(file = "inst/processes/0general.txt")
 }
 \arguments{
 \item{file}{name of a file with title, phases, steps, and efforts}
