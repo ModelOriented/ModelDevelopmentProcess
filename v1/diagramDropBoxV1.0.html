@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="http://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+
+    <style type="text/css">
+
+      @import url('https://fonts.googleapis.com/css?family=Fira+Sans:400,600&display=swap');
+
+      body {
+        display: block;
+        margin: 0px;
+      } 
+
+      text {
+        font-family: 'Fira Sans', sans-serif;
+        fill: #371ea3;
+      }
+
+      .mainTitle {
+        font-size: 50px;
+      }
+
+      .mainLine {
+        stroke: #371ea3;
+        stroke-width: 2.5px;
+        stroke-opacity: 2;
+        stroke-linecap: butt;
+      }
+
+      .vLine {
+        stroke: #371ea3;
+        stroke-width: 2px;
+        stroke-opacity: 2;
+        stroke-linecap: butt;
+      }
+
+      .labelB {
+        font-size: 35px;
+        font-weight: 600;
+      }
+
+      .labelN {
+        font-size: 32px;
+        font-weight: 400;
+      }
+
+      .arrow {
+        stroke: #371ea3;
+        fill: #371ea3;
+      }
+
+      .select-wrap
+      {
+           position:absolute;
+           top: 30px;
+           left: -300px;
+           box-sizing: border-box;
+           width: 290px;
+           overflow: hidden;
+      }
+      .select-box
+      {
+           -webkit-appearance: none;
+           -moz-appearance: none;
+           appearance: none;
+           width: 290px;
+           padding: 10px 10px 15px 15px;
+           background-color: #f1f1f1;
+           border: none;
+           border-radius: 3px;
+           outline: none;
+           font: 27px 'Fira Sans', sans-serif;
+           -webkit-font-smoothing: antialiased;
+           -moz-osx-font-smoothing: grayscale;
+           color: #371ea3;
+           cursor: pointer;
+      }
+
+      .select-point
+      {
+           position: absolute;
+           top: 8px;
+           right: 13px;
+           font: 27px 'Fira Sans', sans-serif;
+           -webkit-font-smoothing: antialiased;
+           -moz-osx-font-smoothing: grayscale;
+           color: #666;
+      }
+      select:-moz-focusring
+      {
+           color: transparent;
+           text-shadow: 0 0 0 #000;
+      }
+
+    </style>
+
+  </head>
+
+  <body>
+
+    <div class="select-wrap">
+      <select class="select-box">
+        <option value="1">jakas</option>
+        <option value="2">fajna</option>
+        <option value="3">nazwa</option>
+      </select>
+      <div class="select-point">v</div>
+    </div>  
+
+    
+    <script type="text/javascript">
+      // change data and enjoy new diagram 
+      var allData = [{
+                    "tbTxt": 
+                      [
+                        {"top":"Problem formulation", "bottom":["P1"]},
+                        {"top":"Crisp Modeling", "bottom":["C1"]},
+                        {"top":"Fine tuning", "bottom":["F1"]},
+                        {"top":"Mantaining and decommissioning", "bottom":["M1"]}
+                      ],
+                    "leftTxt": 
+                      [
+                        {"main":"Data preparation", "sub":["Data acquisition", "Data cleaning", "Sample selection"]},
+                        {"main":"Data understading", "sub":["Data exploration", "Feature selection", "Feature engineering"]},
+                        {"main":"Model assembly", "sub":["Model selection", "Parameters tuning"]},
+                        {"main":"Model audit", "sub":["Data validation", "Model validation", "Model benchmarking"]},
+                        {"main":"Model delivery", "sub":["Model deployment", "Documentation", "Communication", "Model updates"]}
+                      ],
+                    "bar":
+                      [
+                        [{"time":"A1","value":1},{"time":"B1","value":3},{"time":"B2","value":7},{"time":"B3","value":10},{"time":"B4","value":9},{"time":"B5","value":8},{"time":"B6","value":6},{"time":"B7","value":5},{"time":"B8","value":4},{"time":"C1","value":3},{"time":"C2","value":3},{"time":"C3","value":2},{"time":"C4","value":2},{"time":"C5","value":2},{"time":"C6","value":1},{"time":"C7","value":1},{"time":"C8","value":1},{"time":"C9","value":1},{"time":"D1","value":1},{"time":"D2","value":1},{"time":"D3","value":1},{"time":"D4","value":1},{"time":"D5","value":1},{"time":"D6","value":1},{"time":"D7","value":1},{"time":"D8","value":1},{"time":"D9","value":2},{"time":"E1","value":3},{"time":"E2","value":3},{"time":"E3","value":3},{"time":"E4","value":3},{"time":"E5","value":3},{"time":"E6","value":3},{"time":"E7","value":3},{"time":"E8","value":3},{"time":"E9","value":3}],
+                        [{"time":"A1","value":1},{"time":"B1","value":1},{"time":"B2","value":2},{"time":"B3","value":3},{"time":"B4","value":4},{"time":"B5","value":5},{"time":"B6","value":6},{"time":"B7","value":8},{"time":"B8","value":9},{"time":"C1","value":10},{"time":"C2","value":9},{"time":"C3","value":8},{"time":"C4","value":6},{"time":"C5","value":5},{"time":"C6","value":4},{"time":"C7","value":4},{"time":"C8","value":4},{"time":"C9","value":3},{"time":"D1","value":3},{"time":"D2","value":3},{"time":"D3","value":2},{"time":"D4","value":2},{"time":"D5","value":2},{"time":"D6","value":1},{"time":"D7","value":1},{"time":"D8","value":1},{"time":"D9","value":1},{"time":"E1","value":1},{"time":"E2","value":1},{"time":"E3","value":1},{"time":"E4","value":1},{"time":"E5","value":1},{"time":"E6","value":1},{"time":"E7","value":1},{"time":"E8","value":1},{"time":"E9","value":1}],
+                        [{"time":"A1","value":1},{"time":"B1","value":1},{"time":"B2","value":2},{"time":"B3","value":2},{"time":"B4","value":2},{"time":"B5","value":3},{"time":"B6","value":3},{"time":"B7","value":3},{"time":"B8","value":4},{"time":"C1","value":5},{"time":"C2","value":6},{"time":"C3","value":7},{"time":"C4","value":8},{"time":"C5","value":8},{"time":"C6","value":9},{"time":"C7","value":10},{"time":"C8","value":10},{"time":"C9","value":10},{"time":"D1","value":10},{"time":"D2","value":9},{"time":"D3","value":8},{"time":"D4","value":6},{"time":"D5","value":5},{"time":"D6","value":4},{"time":"D7","value":4},{"time":"D8","value":4},{"time":"D9","value":3},{"time":"E1","value":3},{"time":"E2","value":3},{"time":"E3","value":2},{"time":"E4","value":1},{"time":"E5","value":1},{"time":"E6","value":1},{"time":"E7","value":1},{"time":"E8","value":1},{"time":"E9","value":1}],
+                        [{"time":"A1","value":6},{"time":"B1","value":6},{"time":"B2","value":5},{"time":"B3","value":4},{"time":"B4","value":4},{"time":"B5","value":4},{"time":"B6","value":4},{"time":"B7","value":4},{"time":"B8","value":4},{"time":"C1","value":4},{"time":"C2","value":4},{"time":"C3","value":4},{"time":"C4","value":4},{"time":"C5","value":4},{"time":"C6","value":4},{"time":"C7","value":4},{"time":"C8","value":5},{"time":"C9","value":6},{"time":"D1","value":7},{"time":"D2","value":7},{"time":"D3","value":7},{"time":"D4","value":7},{"time":"D5","value":7},{"time":"D6","value":7},{"time":"D7","value":7},{"time":"D8","value":6},{"time":"D9","value":5},{"time":"E1","value":4},{"time":"E2","value":4},{"time":"E3","value":4},{"time":"E4","value":4},{"time":"E5","value":4},{"time":"E6","value":4},{"time":"E7","value":4},{"time":"E8","value":4},{"time":"E9","value":4}],
+                        [{"time":"A1","value":1},{"time":"B1","value":1},{"time":"B2","value":1},{"time":"B3","value":1},{"time":"B4","value":1},{"time":"B5","value":1},{"time":"B6","value":1},{"time":"B7","value":2},{"time":"B8","value":3},{"time":"C1","value":3},{"time":"C2","value":3},{"time":"C3","value":4},{"time":"C4","value":5},{"time":"C5","value":6},{"time":"C6","value":7},{"time":"C7","value":8},{"time":"C8","value":8},{"time":"C9","value":9},{"time":"D1","value":10},{"time":"D2","value":10},{"time":"D3","value":10},{"time":"D4","value":10},{"time":"D5","value":9},{"time":"D6","value":8},{"time":"D7","value":7},{"time":"D8","value":6},{"time":"D9","value":5},{"time":"E1","value":5},{"time":"E2","value":5},{"time":"E3","value":5},{"time":"E4","value":5},{"time":"E5","value":5},{"time":"E6","value":5},{"time":"E7","value":5},{"time":"E8","value":5},{"time":"E9","value":5}]
+                      ]
+                  },{
+                    "tbTxt": 
+                      [
+                        {"top":"Problem formulation", "bottom":["P1","P2","P3"]},
+                        {"top":"Crisp Modeling", "bottom":["C1","C2"]},
+                        {"top":"Fine tuning", "bottom":["F1","F2"]},
+                        {"top":"Mantaining and decommissioning", "bottom":["M1","M2","M3"]}
+                      ],
+                    "leftTxt": 
+                      [
+                        {"main":"Data preparation", "sub":["Data acquisition", "Data cleaning"]},
+                        {"main":"Data understading", "sub":["Data exploration", "Feature selection"]},
+                        {"main":"Model assembly", "sub":["Model selection", "Parameters tuning"]},
+                        {"main":"Model audit", "sub":["Data validation", "Model validation"]},
+                        {"main":"Model delivery", "sub":["Model deployment", "Documentation"]}
+                      ],
+                    "bar":
+                      [
+                        [{"time":"A1","value":1},{"time":"B1","value":2},{"time":"B2","value":3},{"time":"B3","value":5},{"time":"B4","value":6},{"time":"B5","value":7},{"time":"B6","value":8},{"time":"B7","value":9},{"time":"B8","value":10},{"time":"C1","value":9},{"time":"C2","value":8},{"time":"C3","value":7},{"time":"C4","value":6},{"time":"C5","value":5},{"time":"C6","value":4},{"time":"C7","value":3},{"time":"C8","value":2},{"time":"C9","value":1},{"time":"D1","value":1},{"time":"D2","value":1},{"time":"D3","value":1},{"time":"D4","value":1},{"time":"D5","value":1},{"time":"D6","value":1},{"time":"D7","value":1},{"time":"D8","value":1},{"time":"D9","value":2},{"time":"E1","value":3},{"time":"E2","value":3},{"time":"E3","value":3},{"time":"E4","value":3},{"time":"E5","value":3},{"time":"E6","value":3},{"time":"E7","value":3},{"time":"E8","value":3},{"time":"E9","value":3}],
+                        [{"time":"A1","value":1},{"time":"B1","value":2},{"time":"B2","value":3},{"time":"B3","value":4},{"time":"B4","value":5},{"time":"B5","value":6},{"time":"B6","value":7},{"time":"B7","value":8},{"time":"B8","value":9},{"time":"C1","value":10},{"time":"C2","value":9},{"time":"C3","value":8},{"time":"C4","value":7},{"time":"C5","value":6},{"time":"C6","value":5},{"time":"C7","value":4},{"time":"C8","value":3},{"time":"C9","value":2},{"time":"D1","value":3},{"time":"D2","value":3},{"time":"D3","value":2},{"time":"D4","value":2},{"time":"D5","value":2},{"time":"D6","value":1},{"time":"D7","value":1},{"time":"D8","value":1},{"time":"D9","value":1},{"time":"E1","value":1},{"time":"E2","value":1},{"time":"E3","value":1},{"time":"E4","value":1},{"time":"E5","value":1},{"time":"E6","value":1},{"time":"E7","value":1},{"time":"E8","value":1},{"time":"E9","value":1}],
+                        [{"time":"A1","value":1},{"time":"B1","value":1},{"time":"B2","value":2},{"time":"B3","value":2},{"time":"B4","value":2},{"time":"B5","value":3},{"time":"B6","value":3},{"time":"B7","value":3},{"time":"B8","value":4},{"time":"C1","value":5},{"time":"C2","value":6},{"time":"C3","value":7},{"time":"C4","value":8},{"time":"C5","value":8},{"time":"C6","value":9},{"time":"C7","value":10},{"time":"C8","value":10},{"time":"C9","value":10},{"time":"D1","value":10},{"time":"D2","value":9},{"time":"D3","value":8},{"time":"D4","value":6},{"time":"D5","value":5},{"time":"D6","value":4},{"time":"D7","value":4},{"time":"D8","value":4},{"time":"D9","value":3},{"time":"E1","value":3},{"time":"E2","value":3},{"time":"E3","value":2},{"time":"E4","value":1},{"time":"E5","value":1},{"time":"E6","value":1},{"time":"E7","value":1},{"time":"E8","value":1},{"time":"E9","value":1}],
+                        [{"time":"A1","value":6},{"time":"B1","value":6},{"time":"B2","value":5},{"time":"B3","value":4},{"time":"B4","value":4},{"time":"B5","value":4},{"time":"B6","value":4},{"time":"B7","value":4},{"time":"B8","value":4},{"time":"C1","value":4},{"time":"C2","value":4},{"time":"C3","value":4},{"time":"C4","value":4},{"time":"C5","value":4},{"time":"C6","value":4},{"time":"C7","value":4},{"time":"C8","value":5},{"time":"C9","value":6},{"time":"D1","value":7},{"time":"D2","value":7},{"time":"D3","value":7},{"time":"D4","value":7},{"time":"D5","value":7},{"time":"D6","value":7},{"time":"D7","value":7},{"time":"D8","value":6},{"time":"D9","value":5},{"time":"E1","value":4},{"time":"E2","value":4},{"time":"E3","value":4},{"time":"E4","value":4},{"time":"E5","value":4},{"time":"E6","value":4},{"time":"E7","value":4},{"time":"E8","value":4},{"time":"E9","value":4}],
+                        [{"time":"A1","value":1},{"time":"B1","value":2},{"time":"B2","value":3},{"time":"B3","value":4},{"time":"B4","value":5},{"time":"B5","value":6},{"time":"B6","value":7},{"time":"B7","value":8},{"time":"B8","value":9},{"time":"C1","value":10},{"time":"C2","value":3},{"time":"C3","value":4},{"time":"C4","value":5},{"time":"C5","value":6},{"time":"C6","value":7},{"time":"C7","value":8},{"time":"C8","value":8},{"time":"C9","value":9},{"time":"D1","value":10},{"time":"D2","value":10},{"time":"D3","value":10},{"time":"D4","value":10},{"time":"D5","value":9},{"time":"D6","value":8},{"time":"D7","value":7},{"time":"D8","value":6},{"time":"D9","value":5},{"time":"E1","value":5},{"time":"E2","value":5},{"time":"E3","value":5},{"time":"E4","value":5},{"time":"E5","value":5},{"time":"E6","value":5},{"time":"E7","value":5},{"time":"E8","value":5},{"time":"E9","value":5}]
+                      ]
+                  },{
+                    "tbTxt": 
+                      [
+                        {"top":"Problem formulation", "bottom":["P1"]},
+                        {"top":"Crisp Modeling", "bottom":["C1","C2","C3","C4",""]},
+                        {"top":"Fine tuning", "bottom":["F1","F2"]},
+                        {"top":"Mantaining and decommissioning", "bottom":["M1","M2","M3"]}
+                      ],
+                    "leftTxt": 
+                      [
+                        {"main":"Data preparation", "sub":["Data acquisition"]},
+                        {"main":"Data understading", "sub":["Data exploration"]},
+                        {"main":"Model assembly", "sub":["Model selection"]},
+                        {"main":"Model audit", "sub":["Model deployment","Model deployment"]},
+                        {"main":"Model delivery", "sub":["Model deployment","Model deployment", "Documentation","Model deployment"]}
+                      ],
+                    "bar":
+                      [
+                        [{"time":"A1","value":1},{"time":"B1","value":3},{"time":"B2","value":7},{"time":"B3","value":10},{"time":"B4","value":9},{"time":"B5","value":8},{"time":"B6","value":1},{"time":"B7","value":5},{"time":"B8","value":4},{"time":"C1","value":3},{"time":"C2","value":3},{"time":"C3","value":2},{"time":"C4","value":1},{"time":"C5","value":2},{"time":"C6","value":1},{"time":"C7","value":1},{"time":"C8","value":1},{"time":"C9","value":1},{"time":"D1","value":1},{"time":"D2","value":1},{"time":"D3","value":1},{"time":"D4","value":1},{"time":"D5","value":1},{"time":"D6","value":1},{"time":"D7","value":1},{"time":"D8","value":1},{"time":"D9","value":2},{"time":"E1","value":3},{"time":"E2","value":3},{"time":"E3","value":3},{"time":"E4","value":1},{"time":"E5","value":3},{"time":"E6","value":3},{"time":"E7","value":3},{"time":"E8","value":3},{"time":"E9","value":3}],
+                        [{"time":"A1","value":1},{"time":"B1","value":1},{"time":"B2","value":2},{"time":"B3","value":3},{"time":"B4","value":4},{"time":"B5","value":5},{"time":"B6","value":1},{"time":"B7","value":8},{"time":"B8","value":9},{"time":"C1","value":10},{"time":"C2","value":9},{"time":"C3","value":8},{"time":"C4","value":1},{"time":"C5","value":5},{"time":"C6","value":4},{"time":"C7","value":4},{"time":"C8","value":4},{"time":"C9","value":3},{"time":"D1","value":1},{"time":"D2","value":3},{"time":"D3","value":2},{"time":"D4","value":2},{"time":"D5","value":2},{"time":"D6","value":1},{"time":"D7","value":1},{"time":"D8","value":1},{"time":"D9","value":1},{"time":"E1","value":1},{"time":"E2","value":1},{"time":"E3","value":1},{"time":"E4","value":1},{"time":"E5","value":1},{"time":"E6","value":1},{"time":"E7","value":1},{"time":"E8","value":1},{"time":"E9","value":1}],
+                        [{"time":"A1","value":1},{"time":"B1","value":1},{"time":"B2","value":2},{"time":"B3","value":2},{"time":"B4","value":2},{"time":"B5","value":3},{"time":"B6","value":1},{"time":"B7","value":3},{"time":"B8","value":4},{"time":"C1","value":5},{"time":"C2","value":6},{"time":"C3","value":7},{"time":"C4","value":1},{"time":"C5","value":8},{"time":"C6","value":9},{"time":"C7","value":10},{"time":"C8","value":10},{"time":"C9","value":10},{"time":"D1","value":1},{"time":"D2","value":9},{"time":"D3","value":8},{"time":"D4","value":6},{"time":"D5","value":5},{"time":"D6","value":4},{"time":"D7","value":1},{"time":"D8","value":4},{"time":"D9","value":3},{"time":"E1","value":3},{"time":"E2","value":3},{"time":"E3","value":2},{"time":"E4","value":1},{"time":"E5","value":1},{"time":"E6","value":1},{"time":"E7","value":1},{"time":"E8","value":1},{"time":"E9","value":1}],
+                        [{"time":"A1","value":6},{"time":"B1","value":6},{"time":"B2","value":5},{"time":"B3","value":4},{"time":"B4","value":4},{"time":"B5","value":4},{"time":"B6","value":1},{"time":"B7","value":4},{"time":"B8","value":4},{"time":"C1","value":4},{"time":"C2","value":4},{"time":"C3","value":4},{"time":"C4","value":1},{"time":"C5","value":4},{"time":"C6","value":4},{"time":"C7","value":4},{"time":"C8","value":5},{"time":"C9","value":6},{"time":"D1","value":1},{"time":"D2","value":7},{"time":"D3","value":7},{"time":"D4","value":7},{"time":"D5","value":7},{"time":"D6","value":7},{"time":"D7","value":1},{"time":"D8","value":6},{"time":"D9","value":5},{"time":"E1","value":4},{"time":"E2","value":4},{"time":"E3","value":4},{"time":"E4","value":1},{"time":"E5","value":4},{"time":"E6","value":4},{"time":"E7","value":4},{"time":"E8","value":4},{"time":"E9","value":4}],
+                        [{"time":"A1","value":1},{"time":"B1","value":1},{"time":"B2","value":1},{"time":"B3","value":1},{"time":"B4","value":1},{"time":"B5","value":1},{"time":"B6","value":1},{"time":"B7","value":2},{"time":"B8","value":3},{"time":"C1","value":3},{"time":"C2","value":3},{"time":"C3","value":4},{"time":"C4","value":1},{"time":"C5","value":6},{"time":"C6","value":7},{"time":"C7","value":8},{"time":"C8","value":8},{"time":"C9","value":9},{"time":"D1","value":1},{"time":"D2","value":10},{"time":"D3","value":10},{"time":"D4","value":10},{"time":"D5","value":9},{"time":"D6","value":8},{"time":"D7","value":1},{"time":"D8","value":6},{"time":"D9","value":5},{"time":"E1","value":5},{"time":"E2","value":5},{"time":"E3","value":5},{"time":"E4","value":1},{"time":"E5","value":5},{"time":"E6","value":5},{"time":"E7","value":5},{"time":"E8","value":5},{"time":"E9","value":5}]
+                      ]
+                  }]
+
+      var data = allData[0];
+      var tbTxtData = data.tbTxt, leftTxtData = data.leftTxt, barData = data.bar;
+
+      if(leftTxtData.length !== barData.length) {
+        throw "length of data.leftTxt and data.bar should be the same :)"
+      }
+
+      var m = tbTxtData.length;
+      var n = leftTxtData.length;
+      var maxLeftLabels = 1 + d3.max(allData, function(d) {
+        return d3.max(d.leftTxt, function(e) { return e.sub.length; });
+      });
+
+      /// subject to change
+      var labelTextHeight = 40,
+          plotWidth = m*400, 
+          plotHeight = n*(10 + maxLeftLabels*40 + 10),
+          margin = {left: 450, right: 100, top: 200, bottom: 200},
+          filterWidth = 300;
+      ///
+
+      var width = plotWidth + margin.left + margin.right,
+          height = plotHeight + margin.top + margin.bottom;
+
+      var colors = getColors(n);
+
+      var svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+      svg.append("text")
+          .attr("class", "mainTitle")
+          .attr("x", 15)
+          .attr("y", 70)
+          .text("MDP :: Model Development Process");
+
+      svg.append("line")
+          .attr("class", "mainLine")
+          .attr("x1", 10)
+          .attr("x2", width-10)
+          .attr("y1", margin.top/2)
+          .attr("y2", margin.top/2)
+          .attr("color", "black");
+
+      svg.append("text")
+          .attr("class", "labelB")
+          .attr("x", margin.left)
+          .attr("y", (labelTextHeight+margin.top) + plotHeight + 20)
+          .attr("text-anchor", "end")
+          .text("Iterations:");
+
+      svg.append("text")
+          .attr("class", "labelB")
+          .attr("x", margin.left + plotWidth/2)
+          .attr("y", (labelTextHeight+margin.top) + plotHeight + 20 + 120)
+          .attr("text-anchor", "middle")
+          .text("time");
+
+      //   arrow   //
+      var defs = svg.append("defs")
+
+      var marker = defs.append("marker")
+                        .attr("id","arrow")
+                        .attr("viewBox","0 -5 10 10")
+                        .attr("refX",5)
+                        .attr("refY",0)
+                        .attr("markerWidth", 3)
+                        .attr("markerHeight", 3)
+                        .attr("orient", "auto");
+
+      marker.append("path")
+          .attr("d", "M0,-5L10,0L0,5")
+          .attr("class","arrow");
+
+      svg.append("line")
+         .attr("class", "arrow")
+         .attr("x1", margin.left+plotWidth/m)  
+         .attr("x2", width - margin.right - plotWidth/m)  
+         .attr("y1",(labelTextHeight+margin.top) + plotHeight + 90)  
+         .attr("y2",(labelTextHeight+margin.top) + plotHeight + 90)
+         .attr("stroke-width",8)  
+         .attr("marker-end","url(#arrow)"); 
+      //          //
+
+      tbTxtData.forEach(function(d, j){
+
+        let top = d.top, bottom = d.bottom;
+        let l = bottom.length+1;
+
+        let g = svg.append("g");
+
+        g.selectAll()
+            .data([top])
+            .enter()
+            .append("text")
+            .attr("class", "labelB")
+            .attr("text-anchor", "middle")
+            .attr("x", d => margin.left + (j+1/2)*(plotWidth/m))
+            .attr("y", margin.top - labelTextHeight)
+            .text(d => d)
+            .call(wrapText, 350);
+
+        g.selectAll()
+            .data(bottom)
+            .enter()
+            .append("text")
+            .attr("class", "labelB")
+            .attr("id", "bottom"+j)
+            .attr("text-anchor", "middle")
+            .attr("x", (d,i) => margin.left + (j+(i+1)/l)*(plotWidth/m)) // spread evenly
+            .attr("y", (labelTextHeight+margin.top) + plotHeight + 20)
+            .text(d => d);
+
+        if (j+1 < m){
+          g.append("line")
+            .attr("class", "vLine")
+            .attr("x1", margin.left + (j+1)*(plotWidth/m))
+            .attr("x2", margin.left + (j+1)*(plotWidth/m))
+            .attr("y1", margin.top)
+            .attr("y2", margin.top + plotHeight);
+        }
+      });
+
+      leftTxtData.forEach(function(d, j){
+
+        let main = d.main, sub = d.sub;
+        let l = sub.length;
+
+        let g = svg.append("g");
+
+        g.selectAll()
+            .data([main])
+            .enter()
+            .append("text")
+            .attr("class", "labelB")
+            .attr("id", "main"+j)
+            .attr("x", 30)
+            .attr("y", (labelTextHeight+margin.top) + j*plotHeight/n)
+            .text(d => d);
+
+        g.selectAll()
+            .data(sub)
+            .enter()
+            .append("text")
+            .attr("id", "sub"+j)
+            .attr("class", "labelN")
+            .attr("x", 30 + 70)
+            .attr("y", (d,i) => (labelTextHeight+margin.top) + j*plotHeight/n + (i+1)*labelTextHeight)
+            .text(d => d)
+            .call(wrapText, 400-100);
+      });
+
+      var plotTop = margin.top;
+
+      barData.forEach(function(d, j){
+        let x = d3.scaleBand()
+                  .range([margin.left, margin.left + plotWidth]) // rangeRound?
+                  .padding(0.05)
+                  .domain(d.map(function (d) {
+                       return d.time;
+                  }));
+
+        let y = d3.scaleLinear()
+                  .range([plotTop + plotHeight/n, plotTop + plotHeight/n/10]) // add space between max bars
+                  .domain([0, 10]);
+
+        let g = svg.append("g");
+
+        g.selectAll()
+            .data(d)
+            .enter()
+            .append("rect")
+            .attr("id", "rect"+j)
+            .attr("x", d => x(d.time))
+            .attr("y", d => y(d.value))
+            .attr("width", x.bandwidth())
+            .attr("height", d => y(0) - y(d.value))
+            .attr("fill", colors[j]);
+
+        g.append("line")
+          .attr("class", "mainLine")
+          .attr("x1", margin.left)
+          .attr("x2", margin.left + plotWidth)
+          .attr("y1", plotTop + plotHeight/n)
+          .attr("y2", plotTop + plotHeight/n);
+
+        plotTop += plotHeight/n;
+      });
+
+      /// transition section ///
+      d3.select(".select-wrap")
+        .style("left", (width - filterWidth) +"px");
+      d3.select(".select-box")
+        .on("change", function() {
+        update(this.value);
+      }); 
+
+      function update(value) {
+        // call this whenever the filter changes       
+        
+        var newData = allData[value-1];
+        barData = newData.bar;
+        leftTxtData = newData.leftTxt;
+        tbTxtData = newData.tbTxt;
+
+        plotTop = margin.top;
+
+        barData.forEach(function(d, j){
+
+          let x = d3.scaleBand()
+                  .range([margin.left, margin.left + plotWidth]) // rangeRound?
+                  .padding(0.05)
+                  .domain(d.map(function (d) {
+                       return d.time;
+                  }));
+
+          let y = d3.scaleLinear()
+                    .range([plotTop + plotHeight/n, plotTop + plotHeight/n/10]) // add space between max bars
+                    .domain([0, 10]);
+
+          d3.selectAll("#rect"+j)
+            .data(d)
+            .transition().duration(1000)
+            .attr("x", d => x(d.time))
+            .attr("y", d => y(d.value))
+            .attr("height", d => y(0) - y(d.value))
+
+          plotTop += plotHeight/n;
+        });
+
+        leftTxtData.forEach(function(d, j){
+
+          d3.selectAll("#main"+j).remove();
+          d3.selectAll("#sub"+j).remove();
+
+          let main = d.main, sub = d.sub;
+          let l = sub.length;
+
+          let g = svg.append("g");
+
+          g.selectAll()
+              .data([main])
+              .enter()
+              .append("text")
+              .attr("class", "labelB")
+              .attr("id", "main"+j)
+              .attr("x", 30)
+              .attr("y", (labelTextHeight+margin.top) + j*plotHeight/n)
+              .text(d => d);
+
+          g.selectAll()
+              .data(sub)
+              .enter()
+              .append("text")
+              .attr("id", "sub"+j)
+              .attr("class", "labelN")
+              .attr("x", 30 + 70)
+              .attr("y", (d,i) => (labelTextHeight+margin.top) + j*plotHeight/n + (i+1)*labelTextHeight)
+              .text(d => d)
+              .call(wrapText, 400-100);
+        });
+
+        tbTxtData.forEach(function(d, j){
+
+          d3.selectAll("#top"+j).remove();
+          d3.selectAll("#bottom"+j).remove();
+
+          let top = d.top, bottom = d.bottom;
+          let l = bottom.length+1;
+
+          let g = svg.append("g");
+
+          g.selectAll()
+              .data([top])
+              .enter()
+              .append("text")
+              .attr("class", "labelB")
+              .attr("id", "top"+j)
+              .attr("text-anchor", "middle")
+              .attr("x", d => margin.left + (j+1/2)*(plotWidth/m))
+              .attr("y", margin.top - labelTextHeight)
+              .text(d => d)
+              .call(wrapText, 350);
+
+          g.selectAll()
+              .data(bottom)
+              .enter()
+              .append("text")
+              .attr("class", "labelB")
+              .attr("id", "bottom"+j)
+              .attr("text-anchor", "middle")
+              .attr("x", (d,i) => margin.left + (j+(i+1)/l)*(plotWidth/m)) // spread evenly
+              .attr("y", (labelTextHeight+margin.top) + plotHeight + 20)
+              .text(d => d);
+        });
+      }
+
+      function wrapText(text, width) {
+        // this function wraps text
+        text.each(function () {
+            var text = d3.select(this),
+                words = text.text().split(/\s+/).reverse(),
+                word,
+                line = [],
+                lineNumber = 0,
+                lineHeight = 1.1, // ems
+                x = text.attr("x"),
+                y = text.attr("y"),
+                dy = 0, //parseFloat(text.attr("dy")),
+                tspan = text.text(null)
+                            .append("tspan")
+                            .attr("x", x)
+                            .attr("y", y)
+                            .attr("dy", dy + "em");
+            while (word = words.pop()) {
+                line.push(word);
+                tspan.text(line.join(" "));
+                if (tspan.node().getComputedTextLength() > width) {
+                    line.pop();
+                    tspan.text(line.join(" "));
+                    line = [word];
+                    tspan = text.append("tspan")
+                                .attr("x", x)
+                                .attr("y", y)
+                                .attr("dy", ++lineNumber * lineHeight + dy + "em")
+                                .text(word);
+                }
+            }
+        });
+      }
+
+      function getColors(n){
+        // this function returns colors
+        let temp = ["#4378bf", "#46bac2", "#371ea3", "#8bdcbe", "#ae2c87", "#ffa58c", "#f05a71"], ret = [];
+
+        switch(n){
+          case 1:
+            return ["#46bac2"];
+          case 2:
+            return ["#4378bf", "#8bdcbe"];
+          case 3:
+            return ["#4378bf", "#f05a71", "#8bdcbe"];
+          case 4:
+            return ["#4378bf", "#f05a71", "#8bdcbe", "#ffa58c"];
+          case 5:
+            return ["#4378bf", "#f05a71", "#8bdcbe", "#ae2c87", "#ffa58c"];
+          case 6:
+            return ["#4378bf", "#46bac2", "#8bdcbe", "#ae2c87", "#ffa58c", "#f05a71"];
+          case 7:
+            return temp;
+          default:
+            for (var i = 0; i <= n%7; i++) {
+              ret = ret.concat(temp);
+            }
+            return ret;
+        }
+      }
+    </script>
+
+  </body>
+</html>
