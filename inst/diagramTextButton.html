@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="http://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+
+    <style type="text/css">
+
+      @import url('https://fonts.googleapis.com/css?family=Fira+Sans:400,600&display=swap');
+
+      body {
+        display: block;
+        margin: 0px;
+      } 
+
+      text {
+        font-family: 'Fira Sans', sans-serif;
+        fill: #371ea3;
+      }
+
+      .mainTitle {
+        font-size: 50px;
+      }
+
+      .mainLine {
+        stroke: #371ea3;
+        stroke-width: 2.5px;
+        stroke-opacity: 2;
+        stroke-linecap: butt;
+      }
+
+      .vLine {
+        stroke: #371ea3;
+        stroke-width: 2px;
+        stroke-opacity: 2;
+        stroke-linecap: butt;
+      }
+
+      .labelB {
+        font-size: 35px;
+        font-weight: 600;
+      }
+
+      .labelN {
+        font-size: 32px;
+        font-weight: 400;
+      }
+
+      .arrow {
+        stroke: #371ea3;
+        fill: #371ea3;
+      }
+
+      .select
+      {
+        position:absolute;
+        top: 30px;
+        left: -300px;
+        width: 290px;
+        font-size: 35px;
+        font-weight: 600;
+        font-family: 'Fira Sans', sans-serif;
+        color: #371ea3; 
+      }
+    </style>
+
+  </head>
+
+  <body>
+
+##TITLE_DATA##
+    
+    <script type="text/javascript">
+      /// CHANGE POSITION OF SELECTORS
+      d3.selectAll(".select").style("left", function(d,i) { return 1000+(i+1)*200+"px"; });
+      d3.selectAll(".select").on("mouseover",function(){
+                        d3.select(this).style("cursor", "pointer");
+                      }
+                );
+      /// CHANGE DATA
+      var allData = [
+##PROCESS_DATA##
+      ]
+
+      /// 
+      var data = allData[0];
+      var tbTxtData = data.tbTxt, leftTxtData = data.leftTxt, barData = data.bar;
+
+      if(leftTxtData.length !== barData.length) {
+        throw "length of data.leftTxt and data.bar should be the same :)"
+      }
+
+      var m = tbTxtData.length;
+      var n = leftTxtData.length;
+      var maxLeftLabels = 1 + d3.max(allData, function(d) {
+        return d3.max(d.leftTxt, function(e) { return e.sub.length; });
+      });
+
+      /// subject to change
+      var labelTextHeight = 40,
+          plotWidth = m*400, 
+          plotHeight = n*(10 + maxLeftLabels*40 + 10),
+          margin = {left: 450, right: 100, top: 200, bottom: 200},
+          filterWidth = 300;
+      ///
+
+      var width = plotWidth + margin.left + margin.right,
+          height = plotHeight + margin.top + margin.bottom;
+
+      var colors = getColors(n);
+
+      var svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+      svg.append("text")
+          .attr("class", "mainTitle")
+          .attr("x", 15)
+          .attr("y", 70)
+          .text("MDP :: Model Development Process");
+
+      svg.append("line")
+          .attr("class", "mainLine")
+          .attr("x1", 10)
+          .attr("x2", width-10)
+          .attr("y1", margin.top/2)
+          .attr("y2", margin.top/2)
+          .attr("color", "black");
+
+      svg.append("text")
+          .attr("class", "labelB")
+          .attr("x", margin.left)
+          .attr("y", (labelTextHeight+margin.top) + plotHeight + 20)
+          .attr("text-anchor", "end")
+          .text("Iterations:");
+
+      svg.append("text")
+          .attr("class", "labelB")
+          .attr("x", margin.left + plotWidth/2)
+          .attr("y", (labelTextHeight+margin.top) + plotHeight + 20 + 120)
+          .attr("text-anchor", "middle")
+          .text("time");
+
+      //   arrow   //
+      var defs = svg.append("defs")
+
+      var marker = defs.append("marker")
+                        .attr("id","arrow")
+                        .attr("viewBox","0 -5 10 10")
+                        .attr("refX",5)
+                        .attr("refY",0)
+                        .attr("markerWidth", 3)
+                        .attr("markerHeight", 3)
+                        .attr("orient", "auto");
+
+      marker.append("path")
+          .attr("d", "M0,-5L10,0L0,5")
+          .attr("class","arrow");
+
+      svg.append("line")
+         .attr("class", "arrow")
+         .attr("x1", margin.left+plotWidth/m)  
+         .attr("x2", width - margin.right - plotWidth/m)  
+         .attr("y1",(labelTextHeight+margin.top) + plotHeight + 90)  
+         .attr("y2",(labelTextHeight+margin.top) + plotHeight + 90)
+         .attr("stroke-width",8)  
+         .attr("marker-end","url(#arrow)"); 
+      //          //
+
+      tbTxtData.forEach(function(d, j){
+
+        let top = d.top, bottom = d.bottom;
+        let l = bottom.length+1;
+
+        let g = svg.append("g");
+
+        g.selectAll()
+            .data([top])
+            .enter()
+            .append("text")
+            .attr("class", "labelB")
+            .attr("text-anchor", "middle")
+            .attr("x", d => margin.left + (j+1/2)*(plotWidth/m))
+            .attr("y", margin.top - labelTextHeight)
+            .text(d => d)
+            .call(wrapText, 350);
+
+        g.selectAll()
+            .data(bottom)
+            .enter()
+            .append("text")
+            .attr("class", "labelB")
+            .attr("id", "bottom"+j)
+            .attr("text-anchor", "middle")
+            .attr("x", (d,i) => margin.left + (j+(i+1)/l)*(plotWidth/m)) // spread evenly
+            .attr("y", (labelTextHeight+margin.top) + plotHeight + 20)
+            .text(d => d);
+
+        if (j+1 < m){
+          g.append("line")
+            .attr("class", "vLine")
+            .attr("x1", margin.left + (j+1)*(plotWidth/m))
+            .attr("x2", margin.left + (j+1)*(plotWidth/m))
+            .attr("y1", margin.top)
+            .attr("y2", margin.top + plotHeight);
+        }
+      });
+
+      leftTxtData.forEach(function(d, j){
+
+        let main = d.main, sub = d.sub;
+        let l = sub.length;
+
+        let g = svg.append("g");
+
+        g.selectAll()
+            .data([main])
+            .enter()
+            .append("text")
+            .attr("class", "labelB")
+            .attr("id", "main"+j)
+            .attr("x", 30)
+            .attr("y", (labelTextHeight+margin.top) + j*plotHeight/n)
+            .text(d => d);
+
+        g.selectAll()
+            .data(sub)
+            .enter()
+            .append("text")
+            .attr("id", "sub"+j)
+            .attr("class", "labelN")
+            .attr("x", 30 + 70)
+            .attr("y", (d,i) => (labelTextHeight+margin.top) + j*plotHeight/n + (i+1)*labelTextHeight)
+            .text(d => d)
+            .call(wrapText, 400-100);
+      });
+
+      var plotTop = margin.top;
+
+      barData.forEach(function(d, j){
+        let x = d3.scaleBand()
+                  .range([margin.left, margin.left + plotWidth]) // rangeRound?
+                  .padding(0.05)
+                  .domain(d.map(function (d) {
+                       return d.time;
+                  }));
+
+        let y = d3.scaleLinear()
+                  .range([plotTop + plotHeight/n, plotTop + plotHeight/n/10]) // add space between max bars
+                  .domain([0, 10]);
+
+        let g = svg.append("g");
+
+        g.selectAll()
+            .data(d)
+            .enter()
+            .append("rect")
+            .attr("id", "rect"+j)
+            .attr("x", d => x(d.time))
+            .attr("y", d => y(d.value))
+            .attr("width", x.bandwidth())
+            .attr("height", d => y(0) - y(d.value))
+            .attr("fill", colors[j]);
+
+        g.append("line")
+          .attr("class", "mainLine")
+          .attr("x1", margin.left)
+          .attr("x2", margin.left + plotWidth)
+          .attr("y1", plotTop + plotHeight/n)
+          .attr("y2", plotTop + plotHeight/n);
+
+        plotTop += plotHeight/n;
+      });
+
+      /////////////////////////////////////////////////////////////
+      function update(value) {
+        // call this whenever the filter changes       
+        
+        var newData = allData[value-1];
+        barData = newData.bar;
+        leftTxtData = newData.leftTxt;
+        tbTxtData = newData.tbTxt;
+
+        plotTop = margin.top;
+
+        barData.forEach(function(d, j){
+
+          let x = d3.scaleBand()
+                  .range([margin.left, margin.left + plotWidth]) // rangeRound?
+                  .padding(0.05)
+                  .domain(d.map(function (d) {
+                       return d.time;
+                  }));
+
+          let y = d3.scaleLinear()
+                    .range([plotTop + plotHeight/n, plotTop + plotHeight/n/10]) // add space between max bars
+                    .domain([0, 10]);
+
+          d3.selectAll("#rect"+j)
+            .data(d)
+            .transition().duration(1000)
+            .attr("x", d => x(d.time))
+            .attr("y", d => y(d.value))
+            .attr("height", d => y(0) - y(d.value))
+
+          plotTop += plotHeight/n;
+        });
+
+        leftTxtData.forEach(function(d, j){
+
+          d3.selectAll("#main"+j).remove();
+          d3.selectAll("#sub"+j).remove();
+
+          let main = d.main, sub = d.sub;
+          let l = sub.length;
+
+          let g = svg.append("g");
+
+          g.selectAll()
+              .data([main])
+              .enter()
+              .append("text")
+              .attr("class", "labelB")
+              .attr("id", "main"+j)
+              .attr("x", 30)
+              .attr("y", (labelTextHeight+margin.top) + j*plotHeight/n)
+              .text(d => d);
+
+          g.selectAll()
+              .data(sub)
+              .enter()
+              .append("text")
+              .attr("id", "sub"+j)
+              .attr("class", "labelN")
+              .attr("x", 30 + 70)
+              .attr("y", (d,i) => (labelTextHeight+margin.top) + j*plotHeight/n + (i+1)*labelTextHeight)
+              .text(d => d)
+              .call(wrapText, 400-100);
+        });
+
+        tbTxtData.forEach(function(d, j){
+
+          d3.selectAll("#top"+j).remove();
+          d3.selectAll("#bottom"+j).remove();
+
+          let top = d.top, bottom = d.bottom;
+          let l = bottom.length+1;
+
+          let g = svg.append("g");
+
+          g.selectAll()
+              .data([top])
+              .enter()
+              .append("text")
+              .attr("class", "labelB")
+              .attr("id", "top"+j)
+              .attr("text-anchor", "middle")
+              .attr("x", d => margin.left + (j+1/2)*(plotWidth/m))
+              .attr("y", margin.top - labelTextHeight)
+              .text(d => d)
+              .call(wrapText, 350);
+
+          g.selectAll()
+              .data(bottom)
+              .enter()
+              .append("text")
+              .attr("class", "labelB")
+              .attr("id", "bottom"+j)
+              .attr("text-anchor", "middle")
+              .attr("x", (d,i) => margin.left + (j+(i+1)/l)*(plotWidth/m)) // spread evenly
+              .attr("y", (labelTextHeight+margin.top) + plotHeight + 20)
+              .text(d => d);
+        });
+      }
+
+      function wrapText(text, width) {
+        // this function wraps text
+        text.each(function () {
+            var text = d3.select(this),
+                words = text.text().split(/\s+/).reverse(),
+                word,
+                line = [],
+                lineNumber = 0,
+                lineHeight = 1.1, // ems
+                x = text.attr("x"),
+                y = text.attr("y"),
+                dy = 0, //parseFloat(text.attr("dy")),
+                tspan = text.text(null)
+                            .append("tspan")
+                            .attr("x", x)
+                            .attr("y", y)
+                            .attr("dy", dy + "em");
+            while (word = words.pop()) {
+                line.push(word);
+                tspan.text(line.join(" "));
+                if (tspan.node().getComputedTextLength() > width) {
+                    line.pop();
+                    tspan.text(line.join(" "));
+                    line = [word];
+                    tspan = text.append("tspan")
+                                .attr("x", x)
+                                .attr("y", y)
+                                .attr("dy", ++lineNumber * lineHeight + dy + "em")
+                                .text(word);
+                }
+            }
+        });
+      }
+
+      function getColors(n){
+        // this function returns colors
+        let temp = ["#4378bf", "#46bac2", "#371ea3", "#8bdcbe", "#ae2c87", "#ffa58c", "#f05a71"], ret = [];
+
+        switch(n){
+          case 1:
+            return ["#46bac2"];
+          case 2:
+            return ["#4378bf", "#8bdcbe"];
+          case 3:
+            return ["#4378bf", "#f05a71", "#8bdcbe"];
+          case 4:
+            return ["#4378bf", "#f05a71", "#8bdcbe", "#ffa58c"];
+          case 5:
+            return ["#4378bf", "#f05a71", "#8bdcbe", "#ae2c87", "#ffa58c"];
+          case 6:
+            return ["#4378bf", "#46bac2", "#8bdcbe", "#ae2c87", "#ffa58c", "#f05a71"];
+          case 7:
+            return temp;
+          default:
+            for (var i = 0; i <= n%7; i++) {
+              ret = ret.concat(temp);
+            }
+            return ret;
+        }
+      }
+    </script>
+
+  </body>
+</html>
