@@ -1,7 +1,8 @@
 Package: MDP
 Title: Model Development Process
 Version: 0.1
-Authors@R: person("Przemyslaw", "Biecek", email = "przemyslaw.biecek@gmail.com", role = c("aut", "cre"))
+Authors@R: c(person("Przemyslaw", "Biecek", email = "przemyslaw.biecek@gmail.com", role = c("aut", "cre")),
+      person("Hubert", "Baniecki", role = "aut"))
 Description: Generated plots for Model Development Process
 Depends: R (>= 3.5.0)
 License: GPL

@@ -4,7 +4,6 @@
 #' @param website path to website scheme 
 #' @param write_to path to html file in which the final website will be written
 #'
-#' @return 
 #' @export
 generate_process_website <- function(process_files = list.files("inst/processes", full.names = TRUE), 
                                      website = "inst/diagramTextButton.html",
