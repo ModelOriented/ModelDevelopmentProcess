@@ -1,0 +1,10 @@
+Package: MDP
+Title: Model Development Process
+Version: 0.1
+Authors@R: person("Przemyslaw", "Biecek", email = "przemyslaw.biecek@gmail.com", role = c("aut", "cre"))
+Description: Generated plots for Model Development Process
+Depends: R (>= 3.5.0)
+License: GPL
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1
