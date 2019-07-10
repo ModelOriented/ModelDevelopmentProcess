@@ -10,12 +10,12 @@ read_process(file = "processes/general.txt")
 \item{file}{name of a file with title, phases, steps, and efforts}
 }
 \value{
-list with config
+list with process detailes
 }
 \description{
 Read process from a config file
 }
 \examples{
-config <- read_process()
-str(config)
+process <- read_process()
+str(process)
 }

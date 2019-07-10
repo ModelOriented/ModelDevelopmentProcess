@@ -2,12 +2,12 @@
 #'
 #' @param file name of a file with title, phases, steps, and efforts
 #'
-#' @return list with config
+#' @return list with process detailes
 #' @export
 #'
 #' @examples
-#' config <- read_process()
-#' str(config)
+#' process <- read_process()
+#' str(process)
 read_process <- function(file = "processes/general.txt") {
   lines <- readLines(file)
 
