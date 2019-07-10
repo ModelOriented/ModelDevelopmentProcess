@@ -1,0 +1,27 @@
+## Type
+
+Biostatistics
+
+## Phase
+
+Problem formulation: P1
+Crisp Modeling: C1
+Fine tuning: F1
+Mantaining and decommissioning: M1
+
+## Step
+
+Data preparation: Data acquisition, Data cleaning, Sample selection
+Data understading: Data exploration, Feature selection, Feature engineering
+Model assembly: Model selection, Parameters tuning
+Model audit: Data validation, Model validation, Model benchmarking
+Model delivery: Model deployment, Documentation, Communication, Model updates
+
+## Effort
+
+1 1 2 2 2 3 3 3 4 5 6 7 8 8 9 10  10  10  10  9 8 6 5 4 4 4 3 3 3 2 1 1 1 1 1 1
+1 3 7 10  9 8 6 5 4 3 3 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 2 3 3 3 3 3 3 3 3 3
+1 1 2 3 4 5 6 8 9 10  9 8 6 5 4 4 4 3 3 3 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 2 3 3 3 4 5 6 7 8 8 9 10  10  10  10  9 8 7 6 5 5 5 5 5 5 5 5 5 5
+6 6 5 4 4 4 4 4 4 4 4 4 4 4 4 4 5 6 7 7 7 7 7 7 7 6 5 4 4 4 4 4 4 4 4 4
+
