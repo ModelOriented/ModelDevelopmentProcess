@@ -6,6 +6,9 @@
 #' @export
 #'
 #' @examples
+#' process <- read_process()
+#' cat(process_to_json(process))
+#' 
 process_to_json <- function(process) {
   # Phases
   phases_json <- sapply(process$phases, function(phase) {
@@ -32,8 +35,8 @@ process_to_json <- function(process) {
                        "\n]")
   
   paste0("{\n",
-         phases_json,
-         steps_json,
-         effort_json,
+         phases_json,"\n",
+         steps_json,"\n",
+         effort_json,"\n",
          "}\n")
 }

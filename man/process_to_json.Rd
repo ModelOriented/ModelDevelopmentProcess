@@ -15,3 +15,8 @@ string with json representation of a process
 \description{
 Convert process to json
 }
+\examples{
+process <- read_process()
+cat(process_to_json(process))
+
+}
