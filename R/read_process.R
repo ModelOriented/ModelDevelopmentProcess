@@ -22,15 +22,15 @@ read_process <- function(file = "inst/processes/0general.txt") {
   
   ## Phases
   phases <- lines[(sections[2]+1):(sections[3]-1)]
-  phases <- strsplit(phases, split = "[:,] ")
+  phases <- strsplit(phases, split = "[:,] +")
   
   ## Steps
   steps <- lines[(sections[3]+1):(sections[4]-1)]
-  steps <- strsplit(steps, split = "[:,] ")
+  steps <- strsplit(steps, split = "[:,] +")
   
   ## Effort
   effort <- lines[(sections[4]+1):length(lines)]
-  effort <- strsplit(effort, split = "[ \t]")
+  effort <- strsplit(effort, split = "[ \t]+")
   
   list(title = title, 
        phases = phases, 

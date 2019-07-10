@@ -18,7 +18,7 @@
       }
 
       .mainTitle {
-        font-size: 50px;
+        font-size: 40px;
       }
 
       .mainLine {
@@ -36,12 +36,12 @@
       }
 
       .labelB {
-        font-size: 35px;
+        font-size: 30px;
         font-weight: 600;
       }
 
       .labelN {
-        font-size: 32px;
+        font-size: 28px;
         font-weight: 400;
       }
 
@@ -56,7 +56,7 @@
         top: 30px;
         left: -300px;
         width: 290px;
-        font-size: 35px;
+        font-size: 30px;
         font-weight: 600;
         font-family: 'Fira Sans', sans-serif;
         color: #371ea3; 
@@ -195,14 +195,6 @@
             .attr("y", (labelTextHeight+margin.top) + plotHeight + 20)
             .text(d => d);
 
-        if (j+1 < m){
-          g.append("line")
-            .attr("class", "vLine")
-            .attr("x1", margin.left + (j+1)*(plotWidth/m))
-            .attr("x2", margin.left + (j+1)*(plotWidth/m))
-            .attr("y1", margin.top)
-            .attr("y2", margin.top + plotHeight);
-        }
       });
 
       leftTxtData.forEach(function(d, j){
