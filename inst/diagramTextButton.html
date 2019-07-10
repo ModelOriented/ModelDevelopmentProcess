@@ -287,6 +287,12 @@
                     .range([plotTop + plotHeight/n, plotTop + plotHeight/n/10]) // add space between max bars
                     .domain([0, 10]);
 
+
+          d3.selectAll("#rect"+j)
+            .data(d)
+            .exit().transition().duration(1000).attr("height", d => 0)
+
+
           d3.selectAll("#rect"+j)
             .data(d)
             .transition().duration(1000)
