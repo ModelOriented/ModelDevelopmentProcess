@@ -6,8 +6,10 @@
 #' @export
 #'
 #' @examples
-#' process <- read_process()
-#' str(process)
+#' \dontrun{
+#'   process <- read_process("inst/processes/0general.txt")
+#'   str(process)
+#' }
 read_process <- function(file = "inst/processes/0general.txt") {
   lines <- readLines(file)
 

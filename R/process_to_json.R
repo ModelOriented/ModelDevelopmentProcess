@@ -6,8 +6,10 @@
 #' @export
 #'
 #' @examples
-#' process <- read_process()
-#' cat(process_to_json(process))
+#' \dontrun{
+#'   process <- read_process("inst/processes/0general.txt")
+#'   cat(process_to_json(process))
+#' }
 #' 
 process_to_json <- function(process) {
   # Phases

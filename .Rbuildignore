@@ -1,3 +1,5 @@
 ^MDP\.Rproj$
 ^\.Rproj\.user$
 ^examples
+^misc
+^docs

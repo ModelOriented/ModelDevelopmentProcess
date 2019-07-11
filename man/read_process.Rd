@@ -16,6 +16,8 @@ list with process detailes
 Read process from a config file
 }
 \examples{
-process <- read_process()
-str(process)
+\dontrun{
+  process <- read_process("inst/processes/0general.txt")
+  str(process)
+}
 }

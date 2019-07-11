@@ -1,0 +1,11 @@
+bibentry(bibtype = "Article",
+         key = "MDP",
+         title = "Model Development Process ",
+         author = person(given = "Przemyslaw",
+                           family = "Biecek"),
+         journal = {"arXiv"},
+         doi = {"arXiv:1907.04461"},
+         year = {2019},
+         url = {"https://arxiv.org/abs/1907.04461"},
+         header = "To cite MDP in publications use:"
+)

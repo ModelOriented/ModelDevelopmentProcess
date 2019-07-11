@@ -16,7 +16,9 @@ string with json representation of a process
 Convert process to json
 }
 \examples{
-process <- read_process()
-cat(process_to_json(process))
+\dontrun{
+  process <- read_process("inst/processes/0general.txt")
+  cat(process_to_json(process))
+}
 
 }

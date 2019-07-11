@@ -4,7 +4,7 @@
 
 ## Phases
 
-Problem formulation: P1, P2, P3
+Problem formulation: P1, P2
 Crisp Modeling: C1, C2
 Fine tuning: F1, F2, F3
 Mantaining and decommissioning: M1, M2, M3

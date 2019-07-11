@@ -3,7 +3,13 @@ Title: Model Development Process
 Version: 0.1
 Authors@R: c(person("Przemyslaw", "Biecek", email = "przemyslaw.biecek@gmail.com", role = c("aut", "cre")),
       person("Hubert", "Baniecki", role = "aut"))
-Description: Generated plots for Model Development Process
+Description: This package generates profile plots for Model Development Process. 
+  MDP is a general framework in which one can describe which phases and steps 
+  need more effort while building a predictive model. 
+  Specific use-cases are different in terms of workload and focus. 
+  MDP package helps to define these specific profiles and compare them visually.
+  The MDP methodology is available at CC BY license and ML researchers are invited to propose their definitions of process profiles. See examples in the inst/processes folder.
+  You will find a more detailed description of the Model Development Process at <arXiv:1907.04461>.
 Depends: R (>= 3.5.0)
 License: GPL
 Encoding: UTF-8
