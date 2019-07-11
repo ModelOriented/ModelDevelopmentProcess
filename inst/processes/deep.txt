@@ -15,7 +15,7 @@ Data preparation: Data acquisition, Data cleaning
 Data understading: Data exploration, Feature engineering
 Model assembly: Model selection, Parameters tuning
 Model audit: Model validation, Model benchmarking
-Model delivery: Model deployment, Documentation, Communication, Model updates
+Model delivery: Model deployment, Documentation, Model updates
 
 ## Effort
 
