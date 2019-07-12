@@ -11,11 +11,11 @@ Mantaining and decommissioning: M1, M2, M3
 
 ## Steps
 
-Data preparation: Design of Experiment, Data acquisition, Data cleaning, Sample selection
+Data preparation: Design of Experiment, Data acquisition, Data cleaning, Data validation
 Data understading: Data exploration, Feature selection, Feature engineering
-Model assembly: Model selection, Parameters tuning
-Model audit: Data validation, Model validation, Model benchmarking
-Model delivery: Model deployment, Documentation, Communication, Model updates
+Model assembly: Model selection, Parameters tuning, Model debbugging
+Model audit: Residual analysis, Model benchmarking, Model diagnostic
+Model delivery: Model deployment, Model updates, Documentation, Communication
 
 ## Effort
 
