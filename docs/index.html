@@ -10,7 +10,7 @@
       body {
         display: block;
         margin: 0px;
-      } 
+      }
 
       text {
         font-family: 'Fira Sans', sans-serif;
@@ -18,30 +18,30 @@
       }
 
       .mainTitle {
-        font-size: 40px;
+        font-size: 20px;
       }
 
       .mainLine {
         stroke: #371ea3;
-        stroke-width: 2.5px;
+        stroke-width: 1.2px;
         stroke-opacity: 2;
         stroke-linecap: butt;
       }
 
       .vLine {
         stroke: #371ea3;
-        stroke-width: 2px;
+        stroke-width: 1px;
         stroke-opacity: 2;
         stroke-linecap: butt;
       }
 
       .labelB {
-        font-size: 30px;
+        font-size: 15px;
         font-weight: 600;
       }
 
       .labelN {
-        font-size: 28px;
+        font-size: 14px;
         font-weight: 400;
       }
 
@@ -53,13 +53,13 @@
       .select
       {
         position:absolute;
-        top: 30px;
-        left: -300px;
-        width: 290px;
-        font-size: 30px;
+        top: 15px;
+        left: -150px;
+        width: 145px;
+        font-size: 15px;
         font-weight: 600;
         font-family: 'Fira Sans', sans-serif;
-        color: #371ea3; 
+        color: #371ea3;
       }
     </style>
 
@@ -71,10 +71,10 @@
 <text class = "select" onclick="update(2)">[Biostat]</text>
 <text class = "select" onclick="update(3)">[Credit]	</text>
 <text class = "select" onclick="update(4)">[NLP]</text>
-    
+
     <script type="text/javascript">
       /// CHANGE POSITION OF SELECTORS
-      d3.selectAll(".select").style("left", function(d,i) { return 1000+(i+1)*200+"px"; });
+      d3.selectAll(".select").style("left", function(d,i) { return 500+(i+1)*100+"px"; });
       d3.selectAll(".select").on("mouseover",function(){
                         d3.select(this).style("cursor", "pointer");
                       }
@@ -175,7 +175,7 @@
 
       ]
 
-      /// 
+      ///
       var data = allData[0];
       var tbTxtData = data.tbTxt, leftTxtData = data.leftTxt, barData = data.bar;
 
@@ -190,11 +190,11 @@
       });
 
       /// subject to change
-      var labelTextHeight = 40,
-          plotWidth = m*400, 
-          plotHeight = n*(10 + maxLeftLabels*40 + 10),
-          margin = {left: 450, right: 100, top: 200, bottom: 200},
-          filterWidth = 300;
+      var labelTextHeight = 20,
+          plotWidth = m*200,
+          plotHeight = n*(5 + maxLeftLabels*20 + 5),
+          margin = {left: 225, right: 50, top: 100, bottom: 100},
+          filterWidth = 150;
       ///
 
       var width = plotWidth + margin.left + margin.right,
@@ -209,13 +209,13 @@
       svg.append("text")
           .attr("class", "mainTitle")
           .attr("x", 15)
-          .attr("y", 70)
+          .attr("y", 35)
           .text("MDP :: Model Development Process");
 
       svg.append("line")
           .attr("class", "mainLine")
-          .attr("x1", 10)
-          .attr("x2", width-10)
+          .attr("x1", 5)
+          .attr("x2", width-5)
           .attr("y1", margin.top/2)
           .attr("y2", margin.top/2)
           .attr("color", "black");
@@ -223,14 +223,14 @@
       svg.append("text")
           .attr("class", "labelB")
           .attr("x", margin.left)
-          .attr("y", (labelTextHeight+margin.top) + plotHeight + 20)
+          .attr("y", (labelTextHeight+margin.top) + plotHeight + 10)
           .attr("text-anchor", "end")
           .text("Iterations:");
 
       svg.append("text")
           .attr("class", "labelB")
           .attr("x", margin.left + plotWidth/2)
-          .attr("y", (labelTextHeight+margin.top) + plotHeight + 20 + 120)
+          .attr("y", (labelTextHeight+margin.top) + plotHeight + 10 + 60)
           .attr("text-anchor", "middle")
           .text("time");
 
@@ -239,25 +239,25 @@
 
       var marker = defs.append("marker")
                         .attr("id","arrow")
-                        .attr("viewBox","0 -5 10 10")
+                        .attr("viewBox","0 -2 5 5")
                         .attr("refX",5)
                         .attr("refY",0)
-                        .attr("markerWidth", 3)
-                        .attr("markerHeight", 3)
+                        .attr("markerWidth", 2)
+                        .attr("markerHeight", 2)
                         .attr("orient", "auto");
 
       marker.append("path")
-          .attr("d", "M0,-5L10,0L0,5")
+          .attr("d", "M0,-3L6,0L0,3")
           .attr("class","arrow");
 
       svg.append("line")
          .attr("class", "arrow")
-         .attr("x1", margin.left+plotWidth/m)  
-         .attr("x2", width - margin.right - plotWidth/m)  
-         .attr("y1",(labelTextHeight+margin.top) + plotHeight + 90)  
-         .attr("y2",(labelTextHeight+margin.top) + plotHeight + 90)
-         .attr("stroke-width",8)  
-         .attr("marker-end","url(#arrow)"); 
+         .attr("x1", margin.left+plotWidth/m)
+         .attr("x2", width - margin.right - plotWidth/m)
+         .attr("y1",(labelTextHeight+margin.top) + plotHeight + 45)
+         .attr("y2",(labelTextHeight+margin.top) + plotHeight + 45)
+         .attr("stroke-width",4)
+         .attr("marker-end","url(#arrow)");
       //          //
 
       tbTxtData.forEach(function(d, j){
@@ -273,10 +273,10 @@
             .append("text")
             .attr("class", "labelB")
             .attr("text-anchor", "middle")
-            .attr("x", d => margin.left + (j+1/2)*(plotWidth/m))
+            .attr("x", d => margin.left + (j+1/2)*(plotWidth/m)) //(j+1/2)*(plotWidth/m))
             .attr("y", margin.top - labelTextHeight)
             .text(d => d)
-            .call(wrapText, 350);
+            .call(wrapText, 175);
 
         g.selectAll()
             .data(bottom)
@@ -286,7 +286,7 @@
             .attr("id", "bottom"+j)
             .attr("text-anchor", "middle")
             .attr("x", (d,i) => margin.left + (j+(i+1)/l)*(plotWidth/m)) // spread evenly
-            .attr("y", (labelTextHeight+margin.top) + plotHeight + 20)
+            .attr("y", (labelTextHeight+margin.top) + plotHeight + 10)
             .text(d => d);
 
       });
@@ -304,7 +304,7 @@
             .append("text")
             .attr("class", "labelB")
             .attr("id", "main"+j)
-            .attr("x", 30)
+            .attr("x", 15)
             .attr("y", (labelTextHeight+margin.top) + j*plotHeight/n)
             .text(d => d);
 
@@ -314,10 +314,10 @@
             .append("text")
             .attr("id", "sub"+j)
             .attr("class", "labelN")
-            .attr("x", 30 + 70)
+            .attr("x", 15 + 35)
             .attr("y", (d,i) => (labelTextHeight+margin.top) + j*plotHeight/n + (i+1)*labelTextHeight)
             .text(d => d)
-            .call(wrapText, 400-100);
+            .call(wrapText, 200-50);
       });
 
       var plotTop = margin.top;
@@ -359,8 +359,8 @@
 
       /////////////////////////////////////////////////////////////
       function update(value) {
-        // call this whenever the filter changes       
-        
+        // call this whenever the filter changes
+
         var newData = allData[value-1];
         barData = newData.bar;
         leftTxtData = newData.leftTxt;
@@ -413,7 +413,7 @@
               .append("text")
               .attr("class", "labelB")
               .attr("id", "main"+j)
-              .attr("x", 30)
+              .attr("x", 15)
               .attr("y", (labelTextHeight+margin.top) + j*plotHeight/n)
               .text(d => d);
 
@@ -423,10 +423,10 @@
               .append("text")
               .attr("id", "sub"+j)
               .attr("class", "labelN")
-              .attr("x", 30 + 70)
+              .attr("x", 15 + 35)
               .attr("y", (d,i) => (labelTextHeight+margin.top) + j*plotHeight/n + (i+1)*labelTextHeight)
               .text(d => d)
-              .call(wrapText, 400-100);
+              .call(wrapText, 200-50);
         });
 
         tbTxtData.forEach(function(d, j){
@@ -449,7 +449,7 @@
               .attr("x", d => margin.left + (j+1/2)*(plotWidth/m))
               .attr("y", margin.top - labelTextHeight)
               .text(d => d)
-              .call(wrapText, 350);
+              .call(wrapText, 175);
 
           g.selectAll()
               .data(bottom)
@@ -459,7 +459,7 @@
               .attr("id", "bottom"+j)
               .attr("text-anchor", "middle")
               .attr("x", (d,i) => margin.left + (j+(i+1)/l)*(plotWidth/m)) // spread evenly
-              .attr("y", (labelTextHeight+margin.top) + plotHeight + 20)
+              .attr("y", (labelTextHeight+margin.top) + plotHeight + 10)
               .text(d => d);
         });
       }
@@ -472,7 +472,7 @@
                 word,
                 line = [],
                 lineNumber = 0,
-                lineHeight = 1.1, // ems
+                lineHeight = 0.8, // ems
                 x = text.attr("x"),
                 y = text.attr("y"),
                 dy = 0, //parseFloat(text.attr("dy")),
