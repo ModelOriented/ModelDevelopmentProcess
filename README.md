@@ -7,7 +7,7 @@ https://modeloriented.github.io/ModelDevelopmentProcess/
 
 More about MDP profiles: https://arxiv.org/abs/1907.04461
 
-Note that the MDP methodology is available at CC BY license and ML researchers are invited to propose and upload their own definitions of process profiles.  See examples in the inst/processes folder.
+Note that the MDP methodology is available at CC BY license and ML researchers are invited to propose and upload their own definitions of process profiles.  See examples in the `inst/processes` folder.
 
 ## MDP in general
 
